@@ -1,6 +1,7 @@
 const db = firebase.firestore();
 const messaging = firebase.messaging();
 const uid = localStorage.getItem('Uid');
+localStorage.setItem('teste', '1');
 
 var nomeSession;
 
