@@ -81,7 +81,7 @@ $(document).ready(function () {
                 });
             })
             .catch((error) => {
-                alert(error.message);
+                console.log(error.message);
             })
     })
 
