@@ -1,5 +1,7 @@
 const db = firebase.firestore();
 const messaging = firebase.messaging();
+const dado = localStorage.getItem("s");
+console.log(dado);
 
 var uidSession;
 var nomeSession;
