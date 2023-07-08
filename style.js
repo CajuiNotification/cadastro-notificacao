@@ -32,7 +32,7 @@ $(document).ready(function () {
 
     firebase.auth().onAuthStateChanged(function (user) {
 
-        db.collection("usuarios(Site)").where("uid", "==", user.uid).get()
+        db.collection("usuarios(Site)").where("uid", "==", "YkBuDKlulNeII9ug87e55zO2jSH2").get()
             .then((docRef) => {
 
                 docRef.forEach(doc => {
