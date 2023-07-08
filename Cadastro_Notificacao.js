@@ -1,58 +1,11 @@
 const db = firebase.firestore();
 const messaging = firebase.messaging();
-const uid = localStorage.getItem('Uid');
-localStorage.setItem('teste', '1');
 
+var uidSession;
 var nomeSession;
+var emailSession;
+var senhaSession;
 
-db.collection("usuarios(Site)").where("uid", "==", uid).get()
-    .then((docRef) => {
-
-        docRef.forEach(doc => {
-
-            const nomeUser = document.querySelector('div[class="nome"]');
-
-            nomeSession = doc.data().nome;
-
-            const emailUser = document.querySelector('div[class="email"]');
-
-            const email = doc.data().email;
-
-            firebase.storage().ref().child(nomeSession).getDownloadURL()
-                .then((url) => {
-
-                    const img = document.getElementById('imgPhoto');
-                    img.setAttribute('src', url);
-                })
-                .catch((error) => {
-
-                    if (error.code == "storage/object-not-found") {
-
-                        firebase.storage().ref().child("vazio").child("personIcon.jpg").getDownloadURL()
-                            .then((url) => {
-
-                                const img = document.getElementById('imgPhoto');
-                                img.setAttribute('src', url);
-                            })
-                            .catch((error) => {
-                                alert(error.message);
-                            });
-
-                    } else {
-
-                        alert(error.message);
-
-                    }
-                });
-
-            nomeUser.innerHTML = nomeSession;
-            emailUser.innerHTML = email;
-
-        });
-    })
-    .catch((error) => {
-        alert(error.message);
-    })
 firebase.storage().ref().child("vazio").child("if.png").getDownloadURL()
     .then((url) => {
 
@@ -85,7 +38,7 @@ try {
                 body: this.descricao,
                 link: this.link,
                 data_hora: this.data_hora,
-                enviadoPor: uid,
+                enviadoPor: uidSession,
                 enviadoPara: this.cont,
                 aberto: 0,
                 url: ""
@@ -133,8 +86,9 @@ try {
 
                                                 db.collection("historico").add({
 
-                                                    usuarioUID: uid,
-                                                    alteracao: `O usuario ${nomeSession} cadastrou a notificação "${this.titulo}" no dia ${data_hora}`
+                                                    usuarioUID: uidSession,
+                                                    alteracao: `O usuario ${nomeSession} cadastrou a notificação "${this.titulo}" no dia ${data_hora}`,
+                                                    data_hora: data_hora
                                                     
                                                 })
                                                     .then(() => {
@@ -197,8 +151,9 @@ try {
 
                                         db.collection("historico").add({
 
-                                            usuarioUID: uid,
-                                            alteracao: `O usuario: ${nomeSession} cadastrou a notificação "${this.titulo}" no dia ${data_hora}`
+                                            usuarioUID: uidSession,
+                                            alteracao: `O usuario: ${nomeSession} cadastrou a notificação "${this.titulo}" no dia ${data_hora}`,
+                                            data_hora: data_hora
                                         })
                                             .then(() => {
 
