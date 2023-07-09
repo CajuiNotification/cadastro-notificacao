@@ -30,64 +30,65 @@ $(document).ready(function () {
     const mobileMenu = new MobileNavbar(".mobile-menu", ".side-bar");
     mobileMenu.addClickEvent();
 
-    firebase.auth().onAuthStateChanged(function (user) {
+    if (localStorage.getItem("Uid") == "") {
+        window.location.href = "https://cajuinotification.github.io/login/"
+    }
 
-        db.collection("usuarios(Site)").where("uid", "==", user.uid).get()
-            .then((docRef) => {
+    db.collection("usuarios(Site)").where("uid", "==", uid).get()
+        .then((docRef) => {
 
-                docRef.forEach(doc => {
+            docRef.forEach(doc => {
 
-                    const nomeUser = document.querySelector('div[class="nome"]');
+                const nomeUser = document.querySelector('div[class="nome"]');
 
-                    uidSession = user.uid;
-                    nomeSession = doc.data().nome;
-                    emailSession = doc.data().email;
-                    senhaSession = doc.data().senha;
+                nomeSession = doc.data().nome;
+                emailSession = doc.data().email;
 
-                    const emailUser = document.querySelector('div[class="email"]');
+                const emailUser = document.querySelector('div[class="email"]');
 
-                    const email = doc.data().email;
+                const email = doc.data().email;
 
-                    firebase.storage().ref().child(nomeSession).getDownloadURL()
-                        .then((url) => {
+                firebase.storage().ref().child(nomeSession).getDownloadURL()
+                    .then((url) => {
 
-                            const img = document.getElementById('imgPhoto');
-                            img.setAttribute('src', url);
-                        })
-                        .catch((error) => {
+                        const img = document.getElementById('imgPhoto');
+                        img.setAttribute('src', url);
+                    })
+                    .catch((error) => {
 
-                            if (error.code == "storage/object-not-found") {
+                        if (error.code == "storage/object-not-found") {
 
-                                firebase.storage().ref().child("vazio").child("personIcon.jpg").getDownloadURL()
-                                    .then((url) => {
+                            firebase.storage().ref().child("vazio").child("personIcon.jpg").getDownloadURL()
+                                .then((url) => {
 
-                                        const img = document.getElementById('imgPhoto');
-                                        img.setAttribute('src', url);
-                                    })
-                                    .catch((error) => {
-                                        alert(error.message);
-                                    });
+                                    const img = document.getElementById('imgPhoto');
+                                    img.setAttribute('src', url);
+                                })
+                                .catch((error) => {
+                                    alert(error.message);
+                                });
 
-                            } else {
+                        } else {
 
-                                alert(error.message);
+                            alert(error.message);
 
-                            }
-                        });
+                        }
+                    });
 
-                    nomeUser.innerHTML = nomeSession;
-                    emailUser.innerHTML = email;
+                nomeUser.innerHTML = nomeSession;
+                emailUser.innerHTML = email;
 
-                });
-            })
-            .catch((error) => {
-                console.log(error.message);
-            })
-    })
+            });
+        })
+        .catch((error) => {
+            alert(error.message);
+        })
 
     document.querySelector("a[name='logout']").addEventListener("click", function () {
         firebase.auth().signOut()
-            .then(() => {
+            .then((docref) => {
+                localStorage.setItem('sessionOn', "não");
+                localStorage.setItem('Uid', "");
                 window.location.href = "https://cajuinotification.github.io/login/";
             })
             .cath((error) => {

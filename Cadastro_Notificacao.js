@@ -1,10 +1,7 @@
 const db = firebase.firestore();
 const messaging = firebase.messaging();
-
-var uidSession;
+const uid = localStorage.getItem('Uid');
 var nomeSession;
-var emailSession;
-var senhaSession;
 
 firebase.storage().ref().child("vazio").child("if.png").getDownloadURL()
     .then((url) => {
@@ -38,7 +35,7 @@ try {
                 body: this.descricao,
                 link: this.link,
                 data_hora: this.data_hora,
-                enviadoPor: uidSession,
+                enviadoPor: uid,
                 enviadoPara: this.cont,
                 aberto: 0,
                 url: ""
@@ -86,7 +83,7 @@ try {
 
                                                 db.collection("historico").add({
 
-                                                    usuarioUID: uidSession,
+                                                    usuarioUID: uid,
                                                     alteracao: `O usuario ${nomeSession} cadastrou a notificação "${this.titulo}" no dia ${data_hora}`,
                                                     data_hora: data_hora
                                                     
@@ -151,7 +148,7 @@ try {
 
                                         db.collection("historico").add({
 
-                                            usuarioUID: uidSession,
+                                            usuarioUID: uid,
                                             alteracao: `O usuario: ${nomeSession} cadastrou a notificação "${this.titulo}" no dia ${data_hora}`,
                                             data_hora: data_hora
                                         })
