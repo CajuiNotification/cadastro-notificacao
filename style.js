@@ -88,7 +88,7 @@ $(document).ready(function () {
     document.querySelector("a[name='logout']").addEventListener("click", function () {
         firebase.auth().signOut()
             .then(() => {
-                window.location.href = "https://tela-login-site.netlify.app/";
+                window.location.href = "https://cajuinotification.github.io/login/";
             })
             .cath((error) => {
                 alert(error.message);
